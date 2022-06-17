@@ -17,7 +17,7 @@ public class EventContoller {
 
     @RequestMapping("/events")
     public String getEvents(Model model) {
-
+        System.out.println("Hello from controller");
         model.addAttribute("events", eventRepository.findAll());
         return "events";
     }
