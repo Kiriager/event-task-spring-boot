@@ -68,7 +68,7 @@ public class Participant {
     return "Participant{" +
         "id=" + id +
         ", name='" + name + '\'' +
-        ", events=" + events +
+
         '}';
   }
 }

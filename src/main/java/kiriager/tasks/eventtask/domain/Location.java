@@ -84,7 +84,6 @@ public class Location {
         ", description='" + description + '\'' +
         ", lat=" + lat +
         ", lng=" + lng +
-        ", Events=" + Events +
         '}';
   }
 

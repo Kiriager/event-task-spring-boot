@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The List Of Locations</title>
+</head>
+<body>
+    <h1>List of Locations</h1>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+        </tr>
+        <tr th:each="location : ${locations}">
+            <td th:text="${location.id}">1</td>
+            <td th:text="${location.title}">Some Title</td>
+            <td th:text="${location.description}">Some description</td>
+            <td th:text="${location.lat}">latitude</td>
+            <td th:text="${location.lng}">longitude</td>
+        </tr>
+    </table>
+
+</body>
+</html>
