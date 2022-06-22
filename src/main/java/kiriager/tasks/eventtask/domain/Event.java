@@ -35,8 +35,6 @@ public class Event {
     this.id = id;
   }
 
-
-
   public Location getLocation() {
     return location;
   }
