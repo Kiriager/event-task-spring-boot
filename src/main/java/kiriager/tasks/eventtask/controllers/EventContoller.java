@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import kiriager.tasks.eventtask.domain.Event;
 import kiriager.tasks.eventtask.domain.Location;
@@ -61,5 +62,25 @@ public class EventContoller {
         return "record-not-found";
     }
 
-    
+    @RequestMapping(value = "/events/in-area", method = RequestMethod.GET)
+    public String getEventsInArea(@RequestParam double lat1,
+        @RequestParam double lng1, @RequestParam double lat2, 
+        @RequestParam double lng2, Model model) {
+       
+        Iterable<Event> allEvents = eventRepository.findAll();
+        HashSet<Event> eventsInArea = new HashSet<>();
+        for (Event event : allEvents) {
+            Location eventLocation = event.getLocation();
+            if (eventLocation.isInArea(10, 10, 10, 10)) {
+                eventsInArea.add(event);
+            }
+        }
+
+        if (eventsInArea.size() > 0) {
+            model.addAttribute("events", eventsInArea);
+            return "events";
+        }
+
+        return "record-not-found";
+    }
 }

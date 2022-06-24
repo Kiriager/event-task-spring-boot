@@ -76,6 +76,27 @@ public class Location {
     Events = events;
   }
 
+  public boolean isInArea(double lat1, double lng1, double lat2, double lng2) { 
+    double top = lat1;
+    double bottom = lat2;
+    if (lat2 >= lat1) {
+      top = lat2;
+      bottom = lat1;
+    }
+    
+    double left = lng1;
+    double right = lng2;
+    if (lng1 >= lng2) {
+      left = lng2;
+      right = lng1;
+    }
+
+    if (lat < top && lat > bottom && lng > left && lng < right) {
+      return true;
+    }
+    return false;
+  }
+
   @Override
   public String toString() {
     return "Location{" +
