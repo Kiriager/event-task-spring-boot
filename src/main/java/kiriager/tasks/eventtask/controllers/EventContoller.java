@@ -1,6 +1,7 @@
 package kiriager.tasks.eventtask.controllers;
 
 import java.util.HashSet;
+import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,35 +28,18 @@ public class EventContoller {
 
     @RequestMapping(value = "/events", method = RequestMethod.GET)
     @ResponseBody
-    public Iterable<Event> getEvents(Model model) {
-        model.addAttribute("events", eventRepository.findAll());
-        
+    public Iterable<Event> getEvents() {   
         return eventRepository.findAll();
     }
-    /*public String getEvents(Model model) {
-        
-        model.addAttribute("events", eventRepository.findAll());
-        return "events  ";
-    }*/
     
     @RequestMapping(value = "/events/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public Event getEvent(@PathVariable("id") Long id, Model model){
-        return eventRepository.findById(id).get();
+    public Optional getEvent(@PathVariable("id") Long id){
+        return eventRepository.findById(id);
     }
-    /*
-    public String getEvent(@PathVariable("id") Long id, Model model){
-        Optional<Event> event = eventRepository.findById(id);
-        if (event.isPresent()) {
-            model.addAttribute("event", event.get());
-            return event.get().toString();
-            //return "event";
-        }
-        return "record-not-found";
-    }*/
-
+    
     @RequestMapping(value = "/events/in-location/{locationId}", method = RequestMethod.GET)
-    public String getEventsByLocation(@PathVariable("locationId") Long locationId, Model model){
+    public HashSet<Event> getEventsByLocation(@PathVariable("locationId") Long locationId){
        
         Iterable<Event> allEvents = eventRepository.findAll();
         HashSet<Event> eventsInLocation = new HashSet<>();
@@ -66,18 +50,13 @@ public class EventContoller {
             }
         }
 
-        if (eventsInLocation.size() > 0) {
-            model.addAttribute("events", eventsInLocation);
-            return "events";
-        }
-
-        return "record-not-found";
+       return eventsInLocation;
     }
 
     @RequestMapping(value = "/events/in-area", method = RequestMethod.GET)
-    public String getEventsInArea(@RequestParam double lat1,
+    public HashSet<Event> getEventsInArea(@RequestParam double lat1,
         @RequestParam double lng1, @RequestParam double lat2, 
-        @RequestParam double lng2, Model model) {
+        @RequestParam double lng2) {
        
         Iterable<Event> allEvents = eventRepository.findAll();
         HashSet<Event> eventsInArea = new HashSet<>();
@@ -88,11 +67,6 @@ public class EventContoller {
             }
         }
 
-        if (eventsInArea.size() > 0) {
-            model.addAttribute("events", eventsInArea);
-            return "events";
-        }
-
-        return "record-not-found";
+        return eventsInArea;
     }
 }

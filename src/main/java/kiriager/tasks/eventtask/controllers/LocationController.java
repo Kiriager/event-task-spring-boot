@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class LocationController {
@@ -18,20 +19,15 @@ public class LocationController {
   public LocationController(LocationRepository locationRepository) {
     this.locationRepository = locationRepository;
   }
+  @ResponseBody
   @RequestMapping("/locations")
-  public String getLocations(Model model) {
-
-    model.addAttribute("locations", locationRepository.findAll());
-    return "locations";
+  public Iterable<Location> getLocations(Model model) {
+    return locationRepository.findAll();
   }
 
+  @ResponseBody
   @RequestMapping(value = "/locations/{id}", method = RequestMethod.GET)
-  public String getEvent(@PathVariable("id") Long id, Model model){
-    Optional<Location> location = locationRepository.findById(id);
-    if (location.isPresent()) {
-      model.addAttribute("locations", location.get());
-      return "locations";
-    }
-    return "record-not-found";
+  public Location getEvent(@PathVariable("id") Long id){
+    return locationRepository.findById(id).get();
   }
 }
