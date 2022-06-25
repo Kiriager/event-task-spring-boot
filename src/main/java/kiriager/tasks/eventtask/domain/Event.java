@@ -1,11 +1,16 @@
 package kiriager.tasks.eventtask.domain;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 
 @Entity
 public class Event {
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
@@ -15,17 +20,12 @@ public class Event {
   @ManyToOne
   private Location location;
 
-  @ManyToMany(mappedBy = "events")
-  private Set<Participant> participants = new HashSet<>();
-
   public Event(String title, String description){
     this.title = title;
     this.description = description;
   }
 
-  public Event() {
-
-  }
+  public Event() {}
 
   public Long getId() {
     return id;
@@ -69,11 +69,20 @@ public class Event {
         '}';
   }
 
-  public Set<Participant> getParticipants() {
-    return participants;
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Event event = (Event) o;
+
+    return id != null ? id.equals(event.id) : event.id == null;
   }
 
-  public void setParticipants(Set<Participant> participants) {
-    this.participants = participants;
+  @Override
+  public int hashCode() {
+    return id != null ? id.hashCode() : 0;
   }
+
+
 }

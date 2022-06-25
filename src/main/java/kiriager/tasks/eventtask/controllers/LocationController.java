@@ -1,6 +1,5 @@
 package kiriager.tasks.eventtask.controllers;
 
-import kiriager.tasks.eventtask.domain.Event;
 import kiriager.tasks.eventtask.domain.Location;
 import kiriager.tasks.eventtask.repositories.LocationRepository;
 
@@ -30,8 +29,8 @@ public class LocationController {
   public String getEvent(@PathVariable("id") Long id, Model model){
     Optional<Location> location = locationRepository.findById(id);
     if (location.isPresent()) {
-      model.addAttribute("event", location.get());
-      return "event";
+      model.addAttribute("locations", location.get());
+      return "locations";
     }
     return "record-not-found";
   }

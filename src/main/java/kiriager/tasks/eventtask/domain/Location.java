@@ -2,9 +2,17 @@ package kiriager.tasks.eventtask.domain;
 
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import java.util.HashSet;
 import java.util.Set;
 
+@JsonIdentityInfo(
+  generator = ObjectIdGenerators.PropertyGenerator.class, 
+  property = "id")
 @Entity
 public class Location {
 
@@ -15,9 +23,10 @@ public class Location {
   private String description;
   private double lat;
   private double lng;
+
   @OneToMany
   @JoinColumn(name = "location_id")
-  private Set<Event> Events = new HashSet<>();
+  private Set<Event> events = new HashSet<>();
 
   public Location(String title, String description, double lat, double lng) {
     this.title = title;
@@ -69,11 +78,11 @@ public class Location {
   }
 
   public Set<Event> getEvents() {
-    return Events;
+    return events;
   }
 
   public void setEvents(Set<Event> events) {
-    Events = events;
+    this.events = events;
   }
 
   public boolean isInArea(double lat1, double lng1, double lat2, double lng2) { 
