@@ -3,6 +3,8 @@ package kiriager.tasks.eventtask.controllers;
 import java.util.HashSet;
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,9 +35,13 @@ public class EventContoller {
     }
     
     @RequestMapping(value = "/events/{id}", method = RequestMethod.GET)
-    @ResponseBody
-    public Optional getEvent(@PathVariable("id") Long id){
-        return eventRepository.findById(id);
+    //@ResponseBody
+    public ResponseEntity<Event> getEvent(@PathVariable("id") Long id){
+        Optional<Event> entity = eventRepository.findById(id);
+        if (!entity.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        return new ResponseEntity<Event>(entity.get(), HttpStatus.OK);
     }
     
     @RequestMapping(value = "/events/in-location/{locationId}", method = RequestMethod.GET)
