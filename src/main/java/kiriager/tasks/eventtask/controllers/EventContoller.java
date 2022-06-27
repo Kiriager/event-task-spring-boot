@@ -56,7 +56,7 @@ public class EventContoller {
        
         Set<Event> eventsInLocation = location.get().getEvents();
         if (eventsInLocation.size() <= 0) {
-            return new ResponseEntity<>("Thera are no events related to the location", HttpStatus.NO_CONTENT);
+            return ResponseEntity.ok().body("Thera are no events related to the location");
         } 
         
         return ResponseEntity.ok().body(eventsInLocation);
@@ -76,14 +76,13 @@ public class EventContoller {
         HashSet<Event> eventsInArea = new HashSet<>();
         for (Event event : allEvents) {
             Location eventLocation = event.getLocation();
-            if (eventLocation.isInArea(10, 10, 10, 10)) {
+            if (eventLocation.isInArea(lat1, lng1, lat2, lng2)) {
                 eventsInArea.add(event);
             }
         }
 
         if (eventsInArea.size() <= 0) {
-            return new ResponseEntity<>("Thera are no events in the area.",
-                HttpStatus.NO_CONTENT);
+            return ResponseEntity.ok().body("There are no events in the area.");
         } 
 
         return ResponseEntity.ok().body(eventsInArea);
