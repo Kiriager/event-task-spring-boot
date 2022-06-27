@@ -7,7 +7,6 @@ import java.util.Set;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -58,16 +57,21 @@ public class EventContoller {
        
         Set<Event> eventsInLocation = location.get().getEvents();
         if (eventsInLocation.size() <= 0) {
-            return new ResponseEntity<>("Thera are no events related to location", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>("Thera are no events related to the location", HttpStatus.NO_CONTENT);
         } 
         
         return ResponseEntity.ok().body(eventsInLocation);
     }
 
     @RequestMapping(value = "/events/in-area", method = RequestMethod.GET)
-    public HashSet<Event> getEventsInArea(@RequestParam double lat1,
+    public ResponseEntity<Object> getEventsInArea(@RequestParam double lat1,
         @RequestParam double lng1, @RequestParam double lat2, 
         @RequestParam double lng2) {
+        
+        if (!(Location.validateCoordinates(lat1, lng1)
+                && Location.validateCoordinates(lat2, lng2))) {
+            return new ResponseEntity<>("Invalid coordinates.", HttpStatus.BAD_REQUEST);
+        }
        
         Iterable<Event> allEvents = eventRepository.findAll();
         HashSet<Event> eventsInArea = new HashSet<>();
@@ -78,6 +82,11 @@ public class EventContoller {
             }
         }
 
-        return eventsInArea;
+        if (eventsInArea.size() <= 0) {
+            return new ResponseEntity<>("Thera are no events in the area.",
+                HttpStatus.NO_CONTENT);
+        } 
+
+        return ResponseEntity.ok().body(eventsInArea);
     }
 }

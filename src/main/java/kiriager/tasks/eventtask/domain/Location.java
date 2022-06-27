@@ -106,6 +106,16 @@ public class Location {
     return false;
   }
 
+  public static boolean validateCoordinates(double lat, double lng) {
+    if (!(lat <= 90 && lat >= -90)) {
+      return false;
+    }
+    if (!(lng <= 180 && lat >= -180)) {
+      return false;
+    }
+    return true;
+  }
+
   @Override
   public String toString() {
     return "Location{" +
