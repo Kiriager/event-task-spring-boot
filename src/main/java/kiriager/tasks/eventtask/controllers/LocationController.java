@@ -8,6 +8,8 @@ import java.util.Optional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,5 +37,11 @@ public class LocationController {
     }
 
     return ResponseEntity.ok().body(entity.get());
+  }
+
+  @ResponseBody 
+  @PostMapping("/locations/add")
+  public Location addLocation(@RequestBody Location newLocation) {
+    return locationRepository.save(newLocation);
   }
 }
