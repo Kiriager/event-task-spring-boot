@@ -22,8 +22,8 @@ public class BootStrapData implements CommandLineRunner {
   @Override
   public void run(String... args) throws Exception {
 
-    Location location1 = new Location("Huliaypole", "Nice Place", 10.0, 10.0);
-    Location location2 = new Location("Chervone", "Nice Village", 12.0, 8.0);
+    Location location1 = new Location("Huliaypole", "Nice Place", 47.667131967934026, 36.255956240431466);
+    Location location2 = new Location("Chervone", "Nice Village", 47.65629810838176, 36.387839798172614);
     Event event1 = new Event("Battle", "Rusni ***");
     Event event2 = new Event("Fight", "Still rusni ***");
     Event event3 = new Event("War", "And again rusni ***");

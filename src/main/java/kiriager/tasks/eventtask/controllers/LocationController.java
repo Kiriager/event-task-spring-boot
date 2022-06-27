@@ -22,7 +22,8 @@ public class LocationController {
   }
   
   @RequestMapping("/locations")
-  public Iterable<Location> getLocations(Model model) {
+  @ResponseBody
+  public Iterable<Location> getLocations() {
     return locationRepository.findAll();
   }
 
@@ -33,7 +34,7 @@ public class LocationController {
     if (!entity.isPresent()) {
       return ResponseEntity.notFound().build();
     }
-    
+
     return ResponseEntity.ok().body(entity.get());
   }
 }
