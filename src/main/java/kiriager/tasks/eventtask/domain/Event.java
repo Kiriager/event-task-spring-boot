@@ -2,6 +2,8 @@ package kiriager.tasks.eventtask.domain;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 @Entity
 public class Event {

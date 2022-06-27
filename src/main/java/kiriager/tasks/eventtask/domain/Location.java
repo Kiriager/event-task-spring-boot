@@ -4,7 +4,11 @@ package kiriager.tasks.eventtask.domain;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import kiriager.tasks.eventtask.serializers.CustomEventSetSerializer;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,6 +16,7 @@ import java.util.Set;
 @JsonIdentityInfo(
   generator = ObjectIdGenerators.PropertyGenerator.class, 
   property = "id")
+
 @Entity
 public class Location {
 
@@ -25,6 +30,7 @@ public class Location {
 
   @OneToMany
   @JoinColumn(name = "location_id")
+  @JsonSerialize(using = CustomEventSetSerializer.class)
   private Set<Event> events = new HashSet<>();
 
   public Location(String title, String description, double lat, double lng) {
