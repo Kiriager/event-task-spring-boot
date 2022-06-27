@@ -2,6 +2,7 @@ package kiriager.tasks.eventtask.controllers;
 
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import kiriager.tasks.eventtask.domain.Event;
 import kiriager.tasks.eventtask.domain.Location;
 import kiriager.tasks.eventtask.repositories.EventRepository;
+import kiriager.tasks.eventtask.repositories.LocationRepository;
 
 
 
@@ -23,9 +25,12 @@ import kiriager.tasks.eventtask.repositories.EventRepository;
 public class EventContoller {
 
     private final EventRepository eventRepository;
+    private final LocationRepository locationRepository;
 
-    public EventContoller(EventRepository eventRepository) {
+    public EventContoller(
+        EventRepository eventRepository, LocationRepository locationRepository) {
         this.eventRepository = eventRepository;
+        this.locationRepository = locationRepository;
     }
 
     @RequestMapping(value = "/events", method = RequestMethod.GET)
@@ -41,22 +46,22 @@ public class EventContoller {
         if (!entity.isPresent()) {
             return ResponseEntity.notFound().build();
         }
-        return new ResponseEntity<Event>(entity.get(), HttpStatus.OK);
+        return new ResponseEntity<>(entity.get(), HttpStatus.OK);
     }
     
-    @RequestMapping(value = "/events/in-location/{locationId}", method = RequestMethod.GET)
-    public HashSet<Event> getEventsByLocation(@PathVariable("locationId") Long locationId){
-       
-        Iterable<Event> allEvents = eventRepository.findAll();
-        HashSet<Event> eventsInLocation = new HashSet<>();
-        for (Event event : allEvents) {
-            Location eventLocation = event.getLocation();
-            if (eventLocation.getId().equals(locationId)) {
-                eventsInLocation.add(event);
-            }
+    @RequestMapping(value = "/events/in-location", method = RequestMethod.GET)
+    public ResponseEntity<Object> getEventsByLocation(@RequestParam("locationId") Long locationId){
+        Optional<Location> location = locationRepository.findById(locationId);
+        if (!location.isPresent()){
+            return new ResponseEntity<>("Location does't exist.", HttpStatus.BAD_REQUEST);
         }
-
-       return eventsInLocation;
+       
+        Set<Event> eventsInLocation = location.get().getEvents();
+        if (eventsInLocation.size() <= 0) {
+            return new ResponseEntity<>("Thera are no events related to location", HttpStatus.NO_CONTENT);
+        } 
+        
+        return ResponseEntity.ok().body(eventsInLocation);
     }
 
     @RequestMapping(value = "/events/in-area", method = RequestMethod.GET)
