@@ -39,7 +39,6 @@ public class EventContoller {
     }
     
     @RequestMapping(value = "/events/{id}", method = RequestMethod.GET)
-    //@ResponseBody
     public ResponseEntity<Event> getEvent(@PathVariable("id") Long id){
         Optional<Event> entity = eventRepository.findById(id);
         if (!entity.isPresent()) {

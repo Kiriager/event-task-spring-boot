@@ -5,6 +5,7 @@ import kiriager.tasks.eventtask.repositories.LocationRepository;
 
 import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +20,7 @@ public class LocationController {
   public LocationController(LocationRepository locationRepository) {
     this.locationRepository = locationRepository;
   }
-  @ResponseBody
+  
   @RequestMapping("/locations")
   public Iterable<Location> getLocations(Model model) {
     return locationRepository.findAll();
@@ -27,7 +28,12 @@ public class LocationController {
 
   @ResponseBody
   @RequestMapping(value = "/locations/{id}", method = RequestMethod.GET)
-  public Location getEvent(@PathVariable("id") Long id){
-    return locationRepository.findById(id).get();
+  public ResponseEntity<Location> getEvent(@PathVariable("id") Long id){
+    Optional<Location> entity = locationRepository.findById(id);
+    if (!entity.isPresent()) {
+      return ResponseEntity.notFound().build();
+    }
+    
+    return ResponseEntity.ok().body(entity.get());
   }
 }
