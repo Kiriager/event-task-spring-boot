@@ -5,9 +5,6 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import kiriager.tasks.eventtask.serializers.CustomEventSetSerializer;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -28,7 +25,6 @@ public class Location {
 
   @OneToMany
   @JoinColumn(name = "location_id")
-  @JsonSerialize(using = CustomEventSetSerializer.class)
   private Set<Event> events = new HashSet<>();
 
   public Location(String title, String description, double lat, double lng) {
@@ -113,7 +109,7 @@ public class Location {
     if (!(lat <= 90 && lat >= -90)) {
       return false;
     }
-    if (!(lng <= 180 && lat >= -180)) {
+    if (!(lng <= 180 && lng >= -180)) {
       return false;
     }
     return true;
