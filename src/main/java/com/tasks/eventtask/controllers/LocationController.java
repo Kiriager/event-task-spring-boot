@@ -1,0 +1,84 @@
+package com.tasks.eventtask.controllers;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.validation.Valid;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.FieldError;
+import org.springframework.http.HttpStatus;
+
+import com.tasks.eventtask.dtos.CreateLocationDto;
+import com.tasks.eventtask.repositories.LocationRepository;
+
+@RestController
+public class LocationController {
+  private final LocationRepository locationRepository;
+  //private final LocationMapperImpl locationMapper;
+
+  public LocationController(LocationRepository locationRepository) {
+    this.locationRepository = locationRepository;
+    //locationMapper = new LocationMapperImpl();
+  }
+    @PostMapping("/validation/testdto")
+    ResponseEntity<String> addUserByDto(@Valid @RequestBody CreateLocationDto dto) {
+        return ResponseEntity.ok("Location dto is valid");
+    }
+  /*
+  @RequestMapping("/locations")
+  @ResponseBody
+  public Set<LocationDto> getLocations() {
+    Iterable<Location> locations = locationRepository.findAll();
+    Set<LocationDto> dtos = new HashSet<LocationDto>();
+    
+    for (Location location : locations) {
+      dtos.add(locationMapper.toDto(location));
+    }
+    return dtos;
+  }
+
+  @ResponseBody
+  @RequestMapping(value = "/locations/{id}", method = RequestMethod.GET)
+  public ResponseEntity<LocationDto> getEvent(@PathVariable("id") Long id){
+    Optional<Location> entity = locationRepository.findById(id);
+    if (!entity.isPresent()) {
+      return ResponseEntity.notFound().build();
+    }
+    
+    return ResponseEntity.ok().body(locationMapper.toDto(entity.get()));
+  }
+
+  @ResponseBody
+  @PostMapping("/locations")
+  public LocationDto addLocation(@Valid @RequestBody LocationCreateDto dto) {
+    System.out.println(dto);
+    Location newLocation = new Location(
+        dto.getTitle(), dto.getDescription(), dto.getLat(), dto.getLng());
+    
+    newLocation = locationRepository.save(newLocation);
+    return new LocationMapperImpl().toDto(newLocation);
+  }
+
+ 
+    
+  */
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+      Map<String, String> errors = new HashMap<>();
+      ex.getBindingResult().getAllErrors().forEach((error) -> {
+          String fieldName = ((FieldError) error).getField();
+          String errorMessage = error.getDefaultMessage();
+          errors.put(fieldName, errorMessage);
+      });
+      return errors;
+  }
+  
+}
