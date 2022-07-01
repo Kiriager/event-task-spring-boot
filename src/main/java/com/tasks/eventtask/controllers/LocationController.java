@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,7 +55,7 @@ public class LocationController {
 
   
   @GetMapping(value = "/locations/{id}")
-  public ResponseEntity<LocationDto> getEvent(@PathVariable("id") Long id){
+  public ResponseEntity<LocationDto> getLocation(@PathVariable("id") Long id){
     Optional<Location> entity = locationRepository.findById(id);
     if (!entity.isPresent()) {
       return ResponseEntity.notFound().build();
@@ -66,13 +67,28 @@ public class LocationController {
 
   @PostMapping("/locations")
   public LocationDto addLocation(@Valid @RequestBody CreateLocationDto dto) {
-    System.out.println(dto);
+    
     /*Location newLocation = new Location(
         dto.getTitle(), dto.getDescription(), dto.getLat(), dto.getLng());*/
     Location newLocation = locationMapper.fromDto(dto);
     newLocation = locationRepository.save(newLocation);
-    
+
     return new LocationMapperImpl().toDto(newLocation);
+  }
+
+  @PutMapping(value = "/locations/{id}")
+  public ResponseEntity<LocationDto> updateLocation(@Valid @RequestBody CreateLocationDto dto, 
+      @PathVariable("id") Long id){
+    
+    System.out.println(dto);
+    Optional<Location> entity = locationRepository.findById(id);
+    if (!entity.isPresent()) {
+      return ResponseEntity.notFound().build();
+    }
+
+    Location updatedLocation = locationMapper.fromDtoUpdate(dto, entity.get());
+    
+    return ResponseEntity.ok().body(locationMapper.toDto(updatedLocation));
   }
 
   @ResponseStatus(HttpStatus.BAD_REQUEST)

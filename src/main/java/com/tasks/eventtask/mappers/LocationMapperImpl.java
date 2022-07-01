@@ -46,11 +46,46 @@ public class LocationMapperImpl implements LocationMapper{
         Location entity = new Location();
 
         entity.setTitle(src.getTitle());
-        entity.setDescription(src.getDescription());
-
+        
+        if (src.getDescription() != null) {
+            if (src.getDescription().trim().isEmpty()) {
+                entity.setDescription(null);
+            } else {
+                entity.setDescription(src.getDescription());
+            }
+        }
+        
         entity.setLat(Double.parseDouble(src.getLat()));
         entity.setLng(Double.parseDouble(src.getLng()));
         
+        return entity;
+    }
+
+    @Override
+    public Location fromDtoUpdate(CreateLocationDto src, Location entity) {
+        if (src == null || entity == null) {
+            return null;
+        }
+        
+        if (src.getTitle() != null) {
+            entity.setTitle(src.getTitle());
+        }
+        
+        if (src.getDescription() != null) {
+            if (src.getDescription().trim().isEmpty()) {
+                entity.setDescription(null);
+            } else {
+                entity.setDescription(src.getDescription());
+            }
+        }
+        
+        if (src.getLat() != null) {
+            entity.setLat(Double.parseDouble(src.getLat()));
+        }
+        if (src.getLng() != null) {
+            entity.setLng(Double.parseDouble(src.getLng()));
+        }
+       
         return entity;
     }
     

@@ -11,8 +11,7 @@ public class CreateLocationDto {
     @Size(min = 2, max = 50, message = "title must be 2-50 charecters long")
     private String title;
     
-    @NotBlank(message = "description is mandatory")
-    @Size(min = 6, max = 200, message = "description must be 6-50 charecters long")
+    @Size(max = 200, message = "description must be less than 200 charecters long")
     private String description;
 
     //@NotNull(groups = CreateGroup.class)

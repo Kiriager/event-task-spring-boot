@@ -11,4 +11,5 @@ import com.tasks.eventtask.dtos.LocationDto;
 public interface LocationMapper {
     LocationDto toDto(Location src);
     Location fromDto(CreateLocationDto src);
+    Location fromDtoUpdate(CreateLocationDto src, Location entity);
 }
