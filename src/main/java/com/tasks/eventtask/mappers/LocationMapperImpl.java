@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.tasks.eventtask.domain.Event;
 import com.tasks.eventtask.domain.Location;
+import com.tasks.eventtask.dtos.CreateLocationDto;
 import com.tasks.eventtask.dtos.LocationDto;
 
 
@@ -35,6 +36,22 @@ public class LocationMapperImpl implements LocationMapper{
         dto.setEventsIds(eventsIds);
         
         return dto;
+    }
+
+    @Override
+    public Location fromDto(CreateLocationDto src) {
+        if (src == null) {
+            return null;
+        }
+        Location entity = new Location();
+
+        entity.setTitle(src.getTitle());
+        entity.setDescription(src.getDescription());
+
+        entity.setLat(Double.parseDouble(src.getLat()));
+        entity.setLng(Double.parseDouble(src.getLng()));
+        
+        return entity;
     }
     
 }

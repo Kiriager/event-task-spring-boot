@@ -67,10 +67,11 @@ public class LocationController {
   @PostMapping("/locations")
   public LocationDto addLocation(@Valid @RequestBody CreateLocationDto dto) {
     System.out.println(dto);
-    Location newLocation = new Location(
-        dto.getTitle(), dto.getDescription(), dto.getLat(), dto.getLng());
-    
+    /*Location newLocation = new Location(
+        dto.getTitle(), dto.getDescription(), dto.getLat(), dto.getLng());*/
+    Location newLocation = locationMapper.fromDto(dto);
     newLocation = locationRepository.save(newLocation);
+    
     return new LocationMapperImpl().toDto(newLocation);
   }
 

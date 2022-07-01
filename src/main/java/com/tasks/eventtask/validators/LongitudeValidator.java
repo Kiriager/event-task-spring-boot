@@ -6,11 +6,17 @@ import javax.validation.ConstraintValidatorContext;
 import com.tasks.eventtask.constraints.Longitude;
 
 
-public class LongitudeValidator implements ConstraintValidator<Longitude, Double> {
+public class LongitudeValidator implements ConstraintValidator<Longitude, String> {
 
     @Override
-    public boolean isValid(Double lng, ConstraintValidatorContext context) {
-        return lng <= 180 && lng >= -180;
+    public boolean isValid(String lng, ConstraintValidatorContext context) {
+        double lngValue;
+        try {
+            lngValue = Double.parseDouble(lng);
+        } catch (Exception e) {
+            return false;
+        }
+        return lngValue <= 180 && lngValue >= -180;
     }
     
 }

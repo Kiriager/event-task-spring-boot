@@ -16,17 +16,21 @@ public class CreateLocationDto {
     private String description;
 
     //@NotNull(groups = CreateGroup.class)
+    
     @Latitude
-    private double lat;
+    @NotBlank(message = "latitude is mandatory")
+    private String lat;
 
     //@NotNull(groups = CreateGroup.class)
+    
     @Longitude
-    private double lng;
+    @NotBlank(message = "longitude is mandatory")
+    private String lng;
 
     public CreateLocationDto() {
     }
 
-    public CreateLocationDto(String title, String description, double lat, double lng) {
+    public CreateLocationDto(String title, String description, String lat, String lng) {
         this.title = title;
         this.description = description;
         this.lat = lat;
@@ -49,21 +53,23 @@ public class CreateLocationDto {
         this.description = description;
     }
 
-    public double getLat() {
+
+    public String getLat() {
         return this.lat;
     }
 
-    public void setLat(double lat) {
+    public void setLat(String lat) {
         this.lat = lat;
     }
 
-    public double getLng() {
+    public String getLng() {
         return this.lng;
     }
 
-    public void setLng(double lng) {
+    public void setLng(String lng) {
         this.lng = lng;
     }
+    
    /*  
     public interface CreateGroup {
     }
