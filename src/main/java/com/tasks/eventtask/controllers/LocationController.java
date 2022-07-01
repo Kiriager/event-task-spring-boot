@@ -3,6 +3,7 @@ package com.tasks.eventtask.controllers;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -49,9 +51,9 @@ public class LocationController {
     }
     return dtos;
   }
-/*
-  @ResponseBody
-  @RequestMapping(value = "/locations/{id}", method = RequestMethod.GET)
+
+  
+  @GetMapping(value = "/locations/{id}")
   public ResponseEntity<LocationDto> getEvent(@PathVariable("id") Long id){
     Optional<Location> entity = locationRepository.findById(id);
     if (!entity.isPresent()) {
@@ -61,9 +63,9 @@ public class LocationController {
     return ResponseEntity.ok().body(locationMapper.toDto(entity.get()));
   }
 
-  @ResponseBody
+
   @PostMapping("/locations")
-  public LocationDto addLocation(@Valid @RequestBody LocationCreateDto dto) {
+  public LocationDto addLocation(@Valid @RequestBody CreateLocationDto dto) {
     System.out.println(dto);
     Location newLocation = new Location(
         dto.getTitle(), dto.getDescription(), dto.getLat(), dto.getLng());
@@ -72,9 +74,6 @@ public class LocationController {
     return new LocationMapperImpl().toDto(newLocation);
   }
 
- 
-    
-  */
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
