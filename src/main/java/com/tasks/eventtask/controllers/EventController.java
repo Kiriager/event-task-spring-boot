@@ -40,11 +40,7 @@ public class EventController {
     @GetMapping(value = "/events")
     public Set<EventDto> getEvents() {
         Iterable<Event> events = eventRepository.findAll();
-        Set<EventDto> dtos = new HashSet<EventDto>();
-        
-        for (Event event : events) {
-            dtos.add(eventMapper.toDto(event));
-        }
+        Set<EventDto> dtos = eventMapper.toDtos(events);
         return dtos;   
     }
     
@@ -57,19 +53,21 @@ public class EventController {
         return new ResponseEntity<>(eventMapper.toDto(entity.get()), HttpStatus.OK);
     }
     
-    @RequestMapping(value = "/events/in-location", method = RequestMethod.GET)
+    @GetMapping(value = "/events/in-location")
     public ResponseEntity<Object> getEventsByLocation(@RequestParam("locationId") Long locationId){
+
         Optional<Location> location = locationRepository.findById(locationId);
         if (!location.isPresent()){
             return new ResponseEntity<>("Location does't exist.", HttpStatus.BAD_REQUEST);
         }
        
         Set<Event> eventsInLocation = location.get().getEvents();
-        if (eventsInLocation.size() <= 0) {
-            return ResponseEntity.ok().body("Thera are no events related to the location");
-        } 
-        
-        return ResponseEntity.ok().body(eventsInLocation);
+        if (eventsInLocation.size() < 1) {
+            return ResponseEntity.ok().body("There are no events related to the location");
+        }
+
+        Set<EventDto> dtos = eventMapper.toDtos(eventsInLocation);
+        return ResponseEntity.ok().body(dtos);
     }
 
     @RequestMapping(value = "/events/in-area", method = RequestMethod.GET)
