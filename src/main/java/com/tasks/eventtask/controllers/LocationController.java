@@ -10,6 +10,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -67,9 +68,6 @@ public class LocationController {
 
   @PostMapping("/locations")
   public LocationDto addLocation(@Valid @RequestBody CreateLocationDto dto) {
-    
-    /*Location newLocation = new Location(
-        dto.getTitle(), dto.getDescription(), dto.getLat(), dto.getLng());*/
     Location newLocation = locationMapper.fromDto(dto);
     newLocation = locationRepository.save(newLocation);
 
@@ -89,6 +87,16 @@ public class LocationController {
     Location updatedLocation = locationMapper.fromDtoUpdate(dto, entity.get());
     
     return ResponseEntity.ok().body(locationMapper.toDto(updatedLocation));
+  }
+
+  @DeleteMapping(value = "/locations/{id}")
+  public ResponseEntity<String> deleteLocation(@PathVariable("id") Long id){
+    Optional<Location> entity = locationRepository.findById(id);
+    if (!entity.isPresent()) {
+      return ResponseEntity.notFound().build();
+    }
+    locationRepository.delete(entity.get());
+    return ResponseEntity.ok().body("Location id = " + entity.get().getId() + " is deleted");
   }
 
   @ResponseStatus(HttpStatus.BAD_REQUEST)
