@@ -1,13 +1,16 @@
 package com.tasks.eventtask.controllers;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -15,25 +18,28 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.validation.FieldError;
 import org.springframework.http.HttpStatus;
 
+import com.tasks.eventtask.domain.Location;
 import com.tasks.eventtask.dtos.CreateLocationDto;
+import com.tasks.eventtask.dtos.LocationDto;
+import com.tasks.eventtask.mappers.LocationMapperImpl;
 import com.tasks.eventtask.repositories.LocationRepository;
 
 @RestController
 public class LocationController {
   private final LocationRepository locationRepository;
-  //private final LocationMapperImpl locationMapper;
+  private final LocationMapperImpl locationMapper;
 
   public LocationController(LocationRepository locationRepository) {
     this.locationRepository = locationRepository;
-    //locationMapper = new LocationMapperImpl();
+    locationMapper = new LocationMapperImpl();
   }
-    @PostMapping("/validation/testdto")
-    ResponseEntity<String> addUserByDto(@Valid @RequestBody CreateLocationDto dto) {
-        return ResponseEntity.ok("Location dto is valid");
-    }
-  /*
-  @RequestMapping("/locations")
-  @ResponseBody
+
+  @PostMapping("/validation/testdto")
+  ResponseEntity<String> addUserByDto(@Valid @RequestBody CreateLocationDto dto) {
+      return ResponseEntity.ok("Location dto is valid");
+  }
+  
+  @GetMapping("/locations")
   public Set<LocationDto> getLocations() {
     Iterable<Location> locations = locationRepository.findAll();
     Set<LocationDto> dtos = new HashSet<LocationDto>();
@@ -43,7 +49,7 @@ public class LocationController {
     }
     return dtos;
   }
-
+/*
   @ResponseBody
   @RequestMapping(value = "/locations/{id}", method = RequestMethod.GET)
   public ResponseEntity<LocationDto> getEvent(@PathVariable("id") Long id){
