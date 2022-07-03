@@ -61,5 +61,25 @@ public class EventMapperImpl implements EventMapper{
         return entity;
     }
     
+    @Override
+    public Event fromDtoUpdate(CreateEventDto src, Event entity) {
+        if (src == null || entity == null) {
+            return null;
+        }
+        
+        if (src.getTitle() != null) {
+            entity.setTitle(src.getTitle());
+        }
+        
+        if (src.getDescription() != null) {
+            if (src.getDescription().trim().isEmpty()) {
+                entity.setDescription(null);
+            } else {
+                entity.setDescription(src.getDescription());
+            }
+        }
+       
+        return entity;
+    }
     
 }

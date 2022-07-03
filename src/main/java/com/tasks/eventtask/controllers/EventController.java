@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -53,12 +54,29 @@ public class EventController {
     public ResponseEntity<Object> addEvent(@Valid @RequestBody CreateEventDto dto) {
         Optional<Location> location = locationRepository.findById(dto.getLocationId());
         if (!location.isPresent()){
-            return new ResponseEntity<>("Location does't exist.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Location doesn't exist.", HttpStatus.BAD_REQUEST);
         }
         Event newEvent = eventMapper.fromDto(dto);
         newEvent.setLocation(location.get());
 
         return new ResponseEntity<>(eventMapper.toDto(newEvent), HttpStatus.OK); 
+    }
+
+    @PutMapping(value = "/events/{id}")
+    public ResponseEntity<Object> updateEvent(@Valid @RequestBody CreateEventDto dto, @PathVariable("id") Long id) {
+        Optional<Event> event = eventRepository.findById(id);
+        if (!event.isPresent()){
+            return new ResponseEntity<>("Event doesn't exist.", HttpStatus.BAD_REQUEST);
+        }
+        Optional<Location> location = locationRepository.findById(dto.getLocationId());
+        if (!location.isPresent()){
+            return new ResponseEntity<>("Location doesn't exist.", HttpStatus.BAD_REQUEST);
+        }
+
+        Event updatedEvent = eventMapper.fromDtoUpdate(dto, event.get());
+        updatedEvent.setLocation(location.get());
+
+        return new ResponseEntity<>(eventMapper.toDto(updatedEvent), HttpStatus.OK); 
     }
 
     @GetMapping(value = "/events")
@@ -84,7 +102,7 @@ public class EventController {
 
         Optional<Location> location = locationRepository.findById(locationId);
         if (!location.isPresent()){
-            return new ResponseEntity<>("Location does't exist.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Location doesn't exist.", HttpStatus.BAD_REQUEST);
         }
        
         Set<Event> eventsInLocation = location.get().getEvents();

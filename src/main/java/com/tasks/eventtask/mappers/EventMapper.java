@@ -13,5 +13,5 @@ public interface EventMapper {
     EventDto toDto(Event src);
     Set<EventDto> toDtos(Iterable<Event> src);
     Event fromDto(CreateEventDto src);
-    //Location fromDtoUpdate(CreateLocationDto src, Location entity);
+    Event fromDtoUpdate(CreateEventDto src, Event entity);
 }

@@ -78,7 +78,6 @@ public class LocationController {
   public ResponseEntity<LocationDto> updateLocation(@Valid @RequestBody CreateLocationDto dto, 
       @PathVariable("id") Long id){
     
-    System.out.println(dto);
     Optional<Location> entity = locationRepository.findById(id);
     if (!entity.isPresent()) {
       return ResponseEntity.notFound().build();
