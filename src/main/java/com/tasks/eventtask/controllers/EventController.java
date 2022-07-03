@@ -10,7 +10,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.validation.FieldError;
@@ -127,10 +126,10 @@ public class EventController {
 
     @GetMapping(value = "/events/in-area")
     public ResponseEntity<Object> getEventsInArea(
-           @RequestParam("lat1") @Max(value = 180) Double lat1,
-           @Valid @RequestParam @Longitude @NotNull(message = "lng is requaired") Double lng1,
-           @Valid @RequestParam @Latitude @NotNull(message = "lat is requaired") Double lat2,
-           @Valid @RequestParam @Longitude @NotNull(message = "lng is requaired") Double lng2
+           @RequestParam("lat1") @Latitude @NotNull(message = "lat1 is requaired") Double lat1,
+           @RequestParam("lng1") @Longitude @NotNull(message = "lng1 is requaired") Double lng1,
+           @RequestParam("lat2") @Latitude @NotNull(message = "lat2 is requaired") Double lat2,
+           @RequestParam("lng2") @Longitude @NotNull(message = "lng2 is requaired") Double lng2
         ) {
         Area area = new Area(lat1, lng1, lat2, lng2);
              
