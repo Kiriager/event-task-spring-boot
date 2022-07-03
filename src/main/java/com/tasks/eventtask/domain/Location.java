@@ -2,6 +2,7 @@ package com.tasks.eventtask.domain;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.tasks.eventtask.services.Area;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -88,36 +89,15 @@ public class Location {
     this.events = events;
   }
 
-  public boolean isInArea(double lat1, double lng1, double lat2, double lng2) { 
-    double top = lat1;
-    double bottom = lat2;
-    if (lat2 >= lat1) {
-      top = lat2;
-      bottom = lat1;
-    }
-    
-    double left = lng1;
-    double right = lng2;
-    if (lng1 >= lng2) {
-      left = lng2;
-      right = lng1;
-    }
-
-    if (lat < top && lat > bottom && lng > left && lng < right) {
+  public boolean isInArea(Area area) { 
+    if (lat < area.getTop() && lat > area.getBottom()
+        && lng > area.getLeft() && lng < area.getRight()) {
       return true;
+    } else {
+      return false;
     }
-    return false;
   }
 
-  public static boolean validateCoordinates(double lat, double lng) {
-    if (!(lat <= 90 && lat >= -90)) {
-      return false;
-    }
-    if (!(lng <= 180 && lng >= -180)) {
-      return false;
-    }
-    return true;
-  }
 
   @Override
   public String toString() {

@@ -14,7 +14,7 @@ import javax.validation.Constraint;
 
 @Documented
 @Constraint(validatedBy = LatitudeValidator.class)
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Latitude {
     String message() default "invalid latitude value";

@@ -1,6 +1,7 @@
 package com.tasks.eventtask.dtos;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class CreateEventDto {
@@ -11,7 +12,7 @@ public class CreateEventDto {
     @Size(max = 200, message = "description must be less than 200 charecters long")
     private String description;
 
-    @NotBlank(message = "location is mandatory")
+    @NotNull(message = "location is mandatory")
     private Long locationId;
 
     public CreateEventDto() {
@@ -45,6 +46,15 @@ public class CreateEventDto {
         this.title = title;
         this.description = description;
         this.locationId = locationId;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+            " title='" + getTitle() + "'" +
+            ", description='" + getDescription() + "'" +
+            ", locationId='" + getLocationId() + "'" +
+            "}";
     }
     
 }

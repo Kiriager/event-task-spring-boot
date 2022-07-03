@@ -14,7 +14,7 @@ import com.tasks.eventtask.validators.LongitudeValidator;
 
 @Documented
 @Constraint(validatedBy = LongitudeValidator.class)
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Longitude {
     String message() default "invalid longitude value";
