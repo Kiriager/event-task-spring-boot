@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.tasks.eventtask.domain.Event;
+import com.tasks.eventtask.dtos.CreateEventDto;
 import com.tasks.eventtask.dtos.EventDto;
 import com.tasks.eventtask.dtos.LocationDto;
 
@@ -39,5 +40,26 @@ public class EventMapperImpl implements EventMapper{
         }
         return dtos;
     }
+
+    @Override
+    public Event fromDto(CreateEventDto src) {
+        if (src == null) {
+            return null;
+        }
+        Event entity = new Event();
+
+        entity.setTitle(src.getTitle());
+        
+        if (src.getDescription() != null) {
+            if (src.getDescription().trim().isEmpty()) {
+                entity.setDescription(null);
+            } else {
+                entity.setDescription(src.getDescription());
+            }
+        }
+
+        return entity;
+    }
+    
     
 }
