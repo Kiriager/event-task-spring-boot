@@ -17,7 +17,7 @@ import javax.validation.Constraint;
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Latitude {
-    String message() default "invalid latitude value";
+    String message() default "latitude value must be >= 90 and <=-90";
   
     Class<?>[] groups() default {};
   

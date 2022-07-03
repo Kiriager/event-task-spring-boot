@@ -6,11 +6,15 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.validation.FieldError;
-
+import org.springframework.validation.annotation.Validated;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -37,6 +41,7 @@ import com.tasks.eventtask.services.Area;
 
 
 @RestController
+@Validated
 public class EventController {
 
     private final EventRepository eventRepository;
@@ -87,7 +92,6 @@ public class EventController {
         return dtos;   
     }
 
-    
     @GetMapping(value = "/events/{id}")
     public ResponseEntity<EventDto> getEvent(@PathVariable("id") Long id){
         Optional<Event> entity = eventRepository.findById(id);
@@ -96,7 +100,6 @@ public class EventController {
         }
         return new ResponseEntity<>(eventMapper.toDto(entity.get()), HttpStatus.OK);
     }
-
     
     @GetMapping(value = "/events/in-location")
     public ResponseEntity<Object> getEventsByLocation(@RequestParam("locationId") Long locationId){
@@ -115,13 +118,19 @@ public class EventController {
         return ResponseEntity.ok().body(dtos);
     }
 
-/* 
+    @GetMapping(value = "/events/test")
+    public ResponseEntity<String> paramValidationTest(
+        @Valid @RequestParam("value") @Latitude Double value) {
+            System.out.println(value);
+        return ResponseEntity.ok().body(value.toString());
+    }
+
     @GetMapping(value = "/events/in-area")
     public ResponseEntity<Object> getEventsInArea(
-           @Valid @RequestParam @Latitude String lat1,
-           @Valid @RequestParam @Longitude String lng1,
-           @Valid @RequestParam @Latitude String lat2,
-           @Valid @RequestParam @Longitude String lng2
+           @RequestParam("lat1") @Max(value = 180) Double lat1,
+           @Valid @RequestParam @Longitude @NotNull(message = "lng is requaired") Double lng1,
+           @Valid @RequestParam @Latitude @NotNull(message = "lat is requaired") Double lat2,
+           @Valid @RequestParam @Longitude @NotNull(message = "lng is requaired") Double lng2
         ) {
         Area area = new Area(lat1, lng1, lat2, lng2);
              
@@ -140,7 +149,7 @@ public class EventController {
 
         return ResponseEntity.ok().body(eventMapper.toDtos(eventsInArea));
     }
-*/
+
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -151,6 +160,18 @@ public class EventController {
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
+        return errors;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ConstraintViolationException.class)
+    public Map<String, String> handleConstraintViolationException(
+        ConstraintViolationException ex) {
+        Map<String, String> errors = new HashMap<>();
+        for (ConstraintViolation<?> cv : ex.getConstraintViolations()) {
+            errors.put(cv.getMessage(),
+                cv.getInvalidValue() == null ? "null" : cv.getInvalidValue().toString());
+            }
         return errors;
     }
 }
