@@ -6,17 +6,15 @@ import javax.validation.ConstraintValidatorContext;
 import com.tasks.eventtask.constraints.Latitude;
 
 
-public class LatitudeValidator implements ConstraintValidator<Latitude, String> {
+public class LatitudeValidator implements ConstraintValidator<Latitude, Double> {
 
     @Override
-    public boolean isValid(String lat, ConstraintValidatorContext context) {
-        double latValue;
-        try {
-            latValue = Double.parseDouble(lat);
-        } catch (Exception e) {
-            return false;
+    public boolean isValid(Double lat, ConstraintValidatorContext context) {
+        if (lat == null) {
+            return true;
+        } else {
+            return lat <= 90 && lat >= -90;
         }
-        return latValue <= 90 && latValue >= -90;
     }
     
 }

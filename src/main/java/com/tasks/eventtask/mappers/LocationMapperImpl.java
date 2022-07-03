@@ -55,8 +55,8 @@ public class LocationMapperImpl implements LocationMapper{
             }
         }
         
-        entity.setLat(Double.parseDouble(src.getLat()));
-        entity.setLng(Double.parseDouble(src.getLng()));
+        entity.setLat(src.getLat());
+        entity.setLng(src.getLng());
         
         return entity;
     }
@@ -80,10 +80,10 @@ public class LocationMapperImpl implements LocationMapper{
         }
         
         if (src.getLat() != null) {
-            entity.setLat(Double.parseDouble(src.getLat()));
+            entity.setLat(src.getLat());
         }
         if (src.getLng() != null) {
-            entity.setLng(Double.parseDouble(src.getLng()));
+            entity.setLng(src.getLng());
         }
        
         return entity;
