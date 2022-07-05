@@ -74,14 +74,16 @@ public class EventController {
     if (!event.isPresent()) {
       return new ResponseEntity<>("Event doesn't exist.", HttpStatus.BAD_REQUEST);
     }
-    Optional<Location> location = locationRepository.findById(dto.getLocationId());
-    if (!location.isPresent()) {
-      return new ResponseEntity<>("Location doesn't exist.", HttpStatus.BAD_REQUEST);
-    }
-
     Event updatedEvent = eventMapper.fromDtoUpdate(dto, event.get());
-    updatedEvent.setLocation(location.get());
-
+    
+    if (dto.getLocationId() != null){
+      Optional<Location> location = locationRepository.findById(dto.getLocationId());
+      if (!location.isPresent()) {
+        return new ResponseEntity<>("Location doesn't exist.", HttpStatus.BAD_REQUEST);
+      } else {
+        updatedEvent.setLocation(location.get());
+      }
+    }
     return new ResponseEntity<>(eventMapper.toDto(updatedEvent), HttpStatus.OK);
   }
 

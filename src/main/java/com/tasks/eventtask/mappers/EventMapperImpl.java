@@ -7,79 +7,81 @@ import com.tasks.eventtask.domain.Event;
 import com.tasks.eventtask.dtos.CreateEventDto;
 import com.tasks.eventtask.dtos.EventDto;
 import com.tasks.eventtask.dtos.LocationDto;
+import com.tasks.eventtask.repositories.LocationRepository;
 
-public class EventMapperImpl implements EventMapper{
+public class EventMapperImpl implements EventMapper {
+  LocationRepository locationRepository;
 
-    @Override
-    public EventDto toDto(Event src) {
-        if (src == null) {
-            return null;
-        }
-        EventDto dto = new EventDto();
 
-        dto.setId(src.getId());
-        dto.setTitle(src.getTitle());
-        dto.setDescription(src.getDescription());
-        
-        LocationMapperImpl locationMapper = new LocationMapperImpl();
-        LocationDto locationDto = locationMapper.toDto(src.getLocation());
+  @Override
+  public EventDto toDto(Event src) {
+    if (src == null) {
+      return null;
+    }
+    EventDto dto = new EventDto();
 
-        dto.setLocation(locationDto);
-        
-        return dto;
+    dto.setId(src.getId());
+    dto.setTitle(src.getTitle());
+    dto.setDescription(src.getDescription());
+
+    LocationMapperImpl locationMapper = new LocationMapperImpl();
+    LocationDto locationDto = locationMapper.toDto(src.getLocation());
+
+    dto.setLocation(locationDto);
+
+    return dto;
+  }
+
+  @Override
+  public Set<EventDto> toDtos(Iterable<Event> src) {
+    if (src == null) {
+      return null;
+    }
+    Set<EventDto> dtos = new HashSet<EventDto>();
+    for (Event event : src) {
+      dtos.add(toDto(event));
+    }
+    return dtos;
+  }
+
+  @Override
+  public Event fromDto(CreateEventDto src) {
+    if (src == null) {
+      return null;
+    }
+    Event entity = new Event();
+
+    entity.setTitle(src.getTitle());
+
+    if (src.getDescription() != null) {
+      if (src.getDescription().trim().isEmpty()) {
+        entity.setDescription(null);
+      } else {
+        entity.setDescription(src.getDescription());
+      }
     }
 
-    @Override
-    public Set<EventDto> toDtos(Iterable<Event> src) {
-        if (src == null) {
-            return null;
-        }
-        Set<EventDto> dtos = new HashSet<EventDto>();
-        for (Event event : src) {
-            dtos.add(toDto(event));
-        }
-        return dtos;
+    return entity;
+  }
+
+  @Override
+  public Event fromDtoUpdate(CreateEventDto src, Event entity) {
+    if (src == null || entity == null) {
+      return null;
     }
 
-    @Override
-    public Event fromDto(CreateEventDto src) {
-        if (src == null) {
-            return null;
-        }
-        Event entity = new Event();
-
-        entity.setTitle(src.getTitle());
-        
-        if (src.getDescription() != null) {
-            if (src.getDescription().trim().isEmpty()) {
-                entity.setDescription(null);
-            } else {
-                entity.setDescription(src.getDescription());
-            }
-        }
-
-        return entity;
+    if (src.getTitle() != null) {
+      entity.setTitle(src.getTitle());
     }
-    
-    @Override
-    public Event fromDtoUpdate(CreateEventDto src, Event entity) {
-        if (src == null || entity == null) {
-            return null;
-        }
-        
-        if (src.getTitle() != null) {
-            entity.setTitle(src.getTitle());
-        }
-        
-        if (src.getDescription() != null) {
-            if (src.getDescription().trim().isEmpty()) {
-                entity.setDescription(null);
-            } else {
-                entity.setDescription(src.getDescription());
-            }
-        }
-       
-        return entity;
+
+    if (src.getDescription() != null) {
+      if (src.getDescription().trim().isEmpty()) {
+        entity.setDescription(null);
+      } else {
+        entity.setDescription(src.getDescription());
+      }
     }
-    
+    return entity;
+  }
+
 }
