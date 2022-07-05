@@ -7,16 +7,16 @@ import com.tasks.eventtask.constraints.Longitude;
 
 public class UpdateLocationDto {
  
-  //@Size(min = 2, max = 50, message = "title must be 2-50 charecters long")
+  @Size(min = 2, max = 50, message = "title must be 2-50 charecters long")
   private String title;
   
-  //@Size(max = 200, message = "description must be less than 200 charecters long")
+  @Size(max = 200, message = "description must be less than 200 charecters long")
   private String description;
   
-  //@Latitude
+  @Latitude
   private Double lat;
   
-  //@Longitude
+  @Longitude
   private Double lng;
 
   public UpdateLocationDto() {
