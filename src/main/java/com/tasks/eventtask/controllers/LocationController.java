@@ -69,21 +69,7 @@ public class LocationController {
 
   @PutMapping(value = "/locations/{id}")
   public ResponseEntity<LocationDto> changeLocation(
-        @RequestBody UpdateLocationDto dto, 
-        @PathVariable("id") Long id){
-    
-    Optional<Location> entity = locationRepository.findById(id);
-    if (!entity.isPresent()) {
-      return ResponseEntity.notFound().build();
-    }
-
-    Location updatedLocation = locationMapper.fromDtoUpdate(dto, entity.get());
-    return ResponseEntity.ok().body(locationMapper.toDto(updatedLocation));
-  }
-  
-  @PutMapping(value = "/location/{id}")
-  public ResponseEntity<LocationDto> updateLocation(
-        @RequestBody UpdateLocationDto dto, 
+        @Valid @RequestBody UpdateLocationDto dto, 
         @PathVariable("id") Long id){
     
     Optional<Location> entity = locationRepository.findById(id);
