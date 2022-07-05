@@ -17,10 +17,10 @@ import com.tasks.eventtask.validators.LongitudeValidator;
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Longitude {
-    String message() default "longitude value must be >= 180 and <=-180";
-  
-    Class<?>[] groups() default {};
-  
-    Class<? extends Payload>[] payload() default {};
+  String message() default "longitude value must be >= 180 and <=-180";
+
+  Class<?>[] groups() default {};
+
+  Class<? extends Payload>[] payload() default {};
 }
 

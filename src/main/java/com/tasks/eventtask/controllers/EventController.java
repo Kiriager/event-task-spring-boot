@@ -9,7 +9,6 @@ import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.validation.FieldError;

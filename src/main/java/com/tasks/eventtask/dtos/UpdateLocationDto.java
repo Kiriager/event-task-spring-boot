@@ -1,32 +1,28 @@
 package com.tasks.eventtask.dtos;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.tasks.eventtask.constraints.Latitude;
 import com.tasks.eventtask.constraints.Longitude;
 
-public class CreateLocationDto {
-  @NotBlank(message = "title is mandatory")
-  @Size(min = 2, max = 50, message = "title must be 2-50 charecters long")
+public class UpdateLocationDto {
+ 
+  //@Size(min = 2, max = 50, message = "title must be 2-50 charecters long")
   private String title;
   
-  @Size(max = 200, message = "description must be less than 200 charecters long")
+  //@Size(max = 200, message = "description must be less than 200 charecters long")
   private String description;
   
-  @NotNull(message = "latitude is mandatory")
-  @Latitude
+  //@Latitude
   private Double lat;
   
-  @NotNull(message = "longitude is mandatory")
-  @Longitude
+  //@Longitude
   private Double lng;
 
-  public CreateLocationDto() {
+  public UpdateLocationDto() {
   }
 
-  public CreateLocationDto(String title, String description, Double lat, Double lng) {
+  public UpdateLocationDto(String title, String description, Double lat, Double lng) {
     this.title = title;
     this.description = description;
     this.lat = lat;
@@ -48,6 +44,7 @@ public class CreateLocationDto {
   public void setDescription(String description) {
     this.description = description;
   }
+
 
   public Double getLat() {
     return this.lat;
